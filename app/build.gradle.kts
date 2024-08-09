@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp") version "1.5.30-1.0.0"
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
 }
 
 android {
@@ -55,7 +55,6 @@ dependencies {
     implementation(libs.androidx.core.ktx.v1131)
     implementation(libs.androidx.lifecycle.runtime.ktx.v284)
     implementation(libs.androidx.activity.compose.v172)
-    implementation(libs.androidx.activity)
 
     // Compose dependencies
     implementation(platform(libs.androidx.compose.bom.v20240100))
@@ -63,6 +62,11 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.androidx.compose.ui.ui)
+    implementation(libs.androidx.compose.ui.ui.graphics)
+    implementation(libs.androidx.compose.ui.ui.tooling.preview)
+    implementation(libs.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     // Testing dependencies
     testImplementation(libs.junit)
@@ -75,8 +79,8 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    //Room dependencies
+    // Room dependencies
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler.v261)
+    ksp(libs.androidx.room.compiler)
 }

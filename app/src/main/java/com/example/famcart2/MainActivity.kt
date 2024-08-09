@@ -3,25 +3,46 @@ package com.example.famcart2
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.room.Room
+import com.example.famcart2.data.database.ShoppingDatabase
+import com.example.famcart2.data.repository.ItemRepository
+import com.example.famcart2.data.ui.ShoppingListScreen
+import com.example.famcart2.data.ui.viewmodel.ShoppingViewModel
+import com.example.famcart2.data.ui.viewmodel.ShoppingViewModelFactory
 import com.example.famcart2.ui.theme.FamCart2Theme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // Initialize the repository
+        val database = Room.databaseBuilder(
+            applicationContext,
+            ShoppingDatabase::class.java,
+            "shopping_db"
+        ).build()
+        val repository = ItemRepository(database.itemDao())
+
+        // Create an instance of the ViewModelFactory
+        val factory = ShoppingViewModelFactory(repository)
+
+        // Get the ViewModel using the factory
+        val shoppingViewModel: ShoppingViewModel by viewModels { factory }
+
         setContent {
             FamCart2Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    ShoppingListScreen(
+                        viewModel = shoppingViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -30,18 +51,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun ShoppingListScreenPreview() {
     FamCart2Theme {
-        Greeting("Android")
+        ShoppingListScreen(
+            viewModel = viewModel()
+        )
     }
 }
