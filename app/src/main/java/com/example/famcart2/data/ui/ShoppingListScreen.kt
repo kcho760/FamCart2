@@ -1,5 +1,6 @@
 package com.example.famcart2.data.ui
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -35,7 +36,9 @@ fun ShoppingListScreen(
             onValueChange = { newItemName = it },
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth(),
+                .width(200.dp)
+                .height(20.dp)
+                .border(1.dp, MaterialTheme.colorScheme.primary),
             singleLine = true
         )
 
@@ -47,7 +50,11 @@ fun ShoppingListScreen(
                     newItemName = ""
                 }
             },
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.tertiary,
+                contentColor = MaterialTheme.colorScheme.onTertiary
+            )
         ) {
             Text("Add Item")
         }
