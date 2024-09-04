@@ -7,6 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
@@ -15,11 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.famcart2.data.ui.viewmodel.ShoppingViewModel
 import com.example.famcart2.data.model.Item
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListScreen(
     modifier: Modifier = Modifier,
@@ -34,16 +38,25 @@ fun ShoppingListScreen(
     ) {
         var newItemName by remember { mutableStateOf("") }
 
-        // Input field to add a new item
-        BasicTextField(
+
+        TextField(
             value = newItemName,
             onValueChange = { newItemName = it },
             modifier = Modifier
                 .padding(16.dp)
                 .width(200.dp)
-                .height(20.dp)
-                .border(1.dp, MaterialTheme.colorScheme.primary),
-            singleLine = true
+                .height(56.dp),  // Material height for text field
+            singleLine = true,
+            placeholder = { Text("Enter item") },
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    // Handle done action
+                }
+            ),
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = MaterialTheme.colorScheme.primary
+            )
         )
 
         // Button to add the item
