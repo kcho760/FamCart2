@@ -29,7 +29,10 @@ class MainActivity : ComponentActivity() {
             applicationContext,
             ShoppingDatabase::class.java,
             "shopping_db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()  // This will drop and recreate the database on schema changes
+            .build()
+
         val repository = ItemRepository(database.itemDao())
 
         // Create an instance of the ViewModelFactory

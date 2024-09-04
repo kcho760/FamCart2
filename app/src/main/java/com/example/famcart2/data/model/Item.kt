@@ -2,10 +2,11 @@ package com.example.famcart2.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.UUID
 
-@Entity(tableName = "shopping_items")
+@Entity
 data class Item(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val name: String,
     val isChecked: Boolean = false
 )

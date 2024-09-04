@@ -4,11 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.famcart2.data.model.Item
 import com.example.famcart2.data.repository.ItemRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ShoppingViewModel(private val repository: ItemRepository) : ViewModel() {
 
@@ -16,42 +14,45 @@ class ShoppingViewModel(private val repository: ItemRepository) : ViewModel() {
     val allItems: StateFlow<List<Item>> = _allItems
 
     init {
-        loadItems()
-    }
-
-    private fun loadItems() {
+        // Fetch items from the repository when ViewModel is created
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _allItems.value = repository.getAllItems()
-            }
+            _allItems.value = repository.getAllItems() // Assume repository provides this function
         }
     }
 
     fun addItem(name: String) {
         val newItem = Item(name = name)
+        _allItems.value = _allItems.value + newItem
+
+        // Add item to the repository (optional)
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.insert(newItem)
-                _allItems.value = repository.getAllItems() // Reload items after adding
-            }
+            repository.insertItem(newItem)
         }
     }
 
-    fun updateItem(item: Item) {
+    fun updateItem(updatedItem: Item) {
+        _allItems.value = _allItems.value.map { if (it.id == updatedItem.id) updatedItem else it }
+
+        // Update item in the repository (optional)
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.update(item)
-                _allItems.value = repository.getAllItems() // Reload items after updating
-            }
+            repository.updateItem(updatedItem)
         }
     }
 
     fun deleteItem(item: Item) {
+        _allItems.value = _allItems.value.filter { it.id != item.id }
+
+        // Delete item from the repository (optional)
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.delete(item)
-                _allItems.value = repository.getAllItems() // Reload items after deleting
-            }
+            repository.deleteItem(item)
         }
+    }
+
+    fun selectAllItems() {
+        _allItems.value = _allItems.value.map { it.copy(isChecked = true) }
+    }
+
+    fun deleteSelectedItems() {
+        _allItems.value = _allItems.value.filterNot { it.isChecked }
     }
 }

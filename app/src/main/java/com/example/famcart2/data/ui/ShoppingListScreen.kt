@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -84,24 +85,24 @@ fun ShoppingListScreen(
                 )
             )
 
-//            // Button to add the item
-//            Button(
-//                onClick = {
-//                    if (newItemName.isNotEmpty()) {
-//                        viewModel.addItem(newItemName)
-//                        newItemName = ""
-//                    }
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(top = 8.dp),
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = MaterialTheme.colorScheme.tertiary,
-//                    contentColor = MaterialTheme.colorScheme.onTertiary
-//                )
-//            ) {
-//                Text("Add Item")
-//            }
+            // Button to add the item
+            Button(
+                onClick = {
+                    if (newItemName.isNotEmpty()) {
+                        viewModel.addItem(newItemName)
+                        newItemName = ""
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    contentColor = MaterialTheme.colorScheme.onTertiary
+                )
+            ) {
+                Text("Add Item")
+            }
         }
 
         // Displaying the shopping list
@@ -125,57 +126,70 @@ fun ShoppingListScreen(
             }
         }
 
-        // Button to add the item
-        Button(
-            onClick = {
-                if (newItemName.isNotEmpty()) {
-                    viewModel.addItem(newItemName)
-                    newItemName = ""
-                }
-            },
+        // Row to position the buttons and mic button
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.tertiary,
-                contentColor = MaterialTheme.colorScheme.onTertiary
-            )
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Add Item")
-        }
-        // Button to activate speech-to-text input at the bottom of the screen
-        IconButton(
-            onClick = {
-                // Request audio permission if not granted
-                ActivityCompat.requestPermissions(
-                    context as Activity,
-                    arrayOf(Manifest.permission.RECORD_AUDIO),
-                    0
+            // "Select All" Button with an icon
+            IconButton(
+                onClick = {
+                    viewModel.selectAllItems() // Call to select all items
+                },
+                modifier = Modifier.size(56.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.CheckBox,  // Use CheckBox icon for Select All
+                    contentDescription = "Select All"
                 )
+            }
 
-                // Start the speech recognizer
-                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                }
+            // Mic button
+            IconButton(
+                onClick = {
+                    // Request audio permission if not granted
+                    ActivityCompat.requestPermissions(
+                        context as Activity,
+                        arrayOf(Manifest.permission.RECORD_AUDIO),
+                        0
+                    )
 
-                speechLauncher.launch(intent)
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)  // Centering the mic button horizontally
-                .padding(16.dp)
-                .size(56.dp)  // Size to match Material Design button size
-                .border(width = 3.dp, color = MaterialTheme.colorScheme.primary, shape = CircleShape)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Mic,
-                contentDescription = "Speak to add item"
-            )
+                    // Start the speech recognizer
+                    val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                    }
+
+                    speechLauncher.launch(intent)
+                },
+                modifier = Modifier
+                    .size(56.dp)
+                    .border(width = 3.dp, color = MaterialTheme.colorScheme.primary, shape = CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Mic,
+                    contentDescription = "Speak to add item"
+                )
+            }
+
+            // "Delete Selected" Button
+            IconButton(
+                onClick = {
+                    viewModel.deleteSelectedItems() // Call to delete selected items
+                },
+                modifier = Modifier.size(56.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,  // Use Delete icon for Delete Selected
+                    contentDescription = "Delete Selected"
+                )
+            }
         }
     }
 }
-
-
 
 @Composable
 fun ShoppingListItem(
