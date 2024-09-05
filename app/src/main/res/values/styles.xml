@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    &lt;!&ndash; Base application theme &ndash;&gt;-->
+<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here &ndash;&gt;-->
+<!--        <item name="colorPrimary">@colors/colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@colors/colorPrimaryDark</item>-->
+<!--        <item name="colorAccent">@colors/colorAccent</item>-->
+<!--    </style>-->
+
+    <!-- Splash screen theme -->
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/ic_launcher_background</item>
+    </style>
+</resources>

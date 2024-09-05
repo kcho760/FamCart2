@@ -77,7 +77,10 @@ fun ShoppingListScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        // Handle done action
+                        if (newItemName.isNotEmpty()) {
+                            viewModel.addItem(newItemName)
+                            newItemName = ""
+                        }
                     }
                 ),
                 colors = TextFieldDefaults.textFieldColors(
@@ -85,24 +88,6 @@ fun ShoppingListScreen(
                 )
             )
 
-            // Button to add the item
-            Button(
-                onClick = {
-                    if (newItemName.isNotEmpty()) {
-                        viewModel.addItem(newItemName)
-                        newItemName = ""
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary,
-                    contentColor = MaterialTheme.colorScheme.onTertiary
-                )
-            ) {
-                Text("Add Item")
-            }
         }
 
         // Displaying the shopping list
@@ -126,6 +111,24 @@ fun ShoppingListScreen(
             }
         }
 
+        // Button to add the item
+        Button(
+            onClick = {
+                if (newItemName.isNotEmpty()) {
+                    viewModel.addItem(newItemName)
+                    newItemName = ""
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.tertiary,
+                contentColor = MaterialTheme.colorScheme.onTertiary
+            )
+        ) {
+            Text("Add Item")
+        }
         // Row to position the buttons and mic button
         Row(
             modifier = Modifier
@@ -137,7 +140,7 @@ fun ShoppingListScreen(
             // "Select All" Button with an icon
             IconButton(
                 onClick = {
-                    viewModel.selectAllItems() // Call to select all items
+                    viewModel.toggleSelectAllItems() // Call to toggle select/deselect all items
                 },
                 modifier = Modifier.size(56.dp)
             ) {

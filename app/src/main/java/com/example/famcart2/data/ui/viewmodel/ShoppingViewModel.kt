@@ -48,9 +48,16 @@ class ShoppingViewModel(private val repository: ItemRepository) : ViewModel() {
         }
     }
 
-    fun selectAllItems() {
-        _allItems.value = _allItems.value.map { it.copy(isChecked = true) }
+    private fun areAllItemsSelected(): Boolean {
+        return _allItems.value.all { it.isChecked }
     }
+
+    // Modify the function to toggle between select and deselect all
+    fun toggleSelectAllItems() {
+        val shouldSelectAll = !areAllItemsSelected()
+        _allItems.value = _allItems.value.map { it.copy(isChecked = shouldSelectAll) }
+    }
+
 
     fun deleteSelectedItems() {
         _allItems.value = _allItems.value.filterNot { it.isChecked }
