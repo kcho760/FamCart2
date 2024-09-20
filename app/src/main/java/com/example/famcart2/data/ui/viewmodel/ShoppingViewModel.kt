@@ -60,6 +60,17 @@ class ShoppingViewModel(private val repository: ItemRepository) : ViewModel() {
 
 
     fun deleteSelectedItems() {
+        val selectedItems = _allItems.value.filter { it.isChecked }
+
+        // Update the in-memory list by removing selected items
         _allItems.value = _allItems.value.filterNot { it.isChecked }
+
+        // Remove the selected items from the repository
+        viewModelScope.launch {
+            selectedItems.forEach { item ->
+                repository.deleteItem(item)
+            }
+        }
     }
+
 }
